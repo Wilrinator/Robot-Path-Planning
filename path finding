@@ -2,7 +2,10 @@ If a robot can only move by following a track, it can't find a path itself, we n
 
 How to find a shortest path using single function for all kinds of maps?  By using dijkstra algorithm.
 
-We use Dijkstra’s algorithm because the map is modeled as a weighted graph where each movement cost is non-negative. Dijkstra guarantees finding the optimal (shortest-cost) path from the start node to all reachable nodes.
+# Why Dijkstra?
+- Works with weighted grid maps
+- Guarantees optimal solution
+- Simple baseline before A* optimization
 
 Ps: if you want to konw how Dijkstra works, you can go to Dijkstra.png and read its comment.
 

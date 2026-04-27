@@ -1,1 +1,12 @@
 
+After we find the shortest paths for robot, we need assign the path, we use greedy method to do so:
+
+1. The first robot get command will assign the path straight to destination
+2. When the other robots get command, it will try to assign the path straight to destination, then it will check all points in path is occupied or not, then remove the occupied part.
+
+This is the strategy I used for my robot during my time in delivery robot company, but there is still many problem...
+
+What happen if the first robot occupy every points in map?  Other robot cant move at all!
+
+In order to solve this problem, I set limited distance of path a robot can assign at one time, so if other robots can move while the first robot is still travelling, they can still be able to move.
+

@@ -1,0 +1,91 @@
+If a robot can only move by following a track, it can't find a path itself, we need to give it a shortest path to its goal.
+
+How to find a shortest path using single function for all kinds of maps?  By using dijkstra algorithm.
+
+We use Dijkstra’s algorithm because the map is modeled as a weighted graph where each movement cost is non-negative. Dijkstra guarantees finding the optimal (shortest-cost) path from the start node to all reachable nodes.
+
+
+
+    def __perform_dijkstra_algorithm(self, start_node: int):
+        """
+        Performs Breadth-First Search to find shortest paths (in terms of distance of edges)
+        from start_node to all other nodes.
+        
+        Returns:
+            shortest_path: dict[node] = list of nodes in the path from start_node
+            distance:       dict[node] = distance (distance of edges)
+        """
+
+
+        # We'll use this to check which node we already visited
+        uncheck_nodes = self.__map.get_nodes()
+
+        # We'll use this dict to store path from start to target
+        shortest_path = {node: [] for node in uncheck_nodes}
+
+        # We'll use this dict to store distance to each node
+        # Set max_value to infinity to update the shortest path,
+        # then we update it by using "less than"
+        # setting start_node distance and path to zero,
+        # because we dont need to move to get to start_node
+        current_distance = {node: sys.maxsize for node in uncheck_nodes}
+        current_distance[start_node] = 0
+        shortest_path[start_node] = [start_node] 
+
+        # next node will need the future node we visit next
+        next_node = deque()
+
+        # Current path is the nodes we visited along the path,starting with start_node
+        # BFS queue: stores nodes to explore (FIFO)
+        current_path = collections.deque([start_node])
+
+        # The algorithm executes until we visit all nodes
+        while uncheck_nodes:
+
+            # First, it will find the exit edge to the next node,
+            # then it will run a for loop for all exit nodes
+            exit_node = self.__map.get_exit_node(start_node)
+
+            for nodes in exit_node:
+                travel_distance = self.__map.get_distance(start_node, nodes) +\
+                                    current_distance[start_node]
+
+                # if distance travel to the next node is smaller than previous result,
+                # it will update the distance and path
+                if current_distance[nodes] > travel_distance:
+                    current_distance[nodes] = travel_distance
+
+                    # We update the current path and update into dictionary
+                    current_path.append(nodes)
+                    new_path = {nodes: current_path[:]}
+                    shortest_path.update(new_path)
+                    current_path.pop()
+
+            # exit nodes will be the next node we visit next
+            next_node.extend(exit_node)
+
+            # After visiting the node, we mark this nodes as "visited"
+            # TODO: check dead node before map generation
+            try:
+                uncheck_nodes.remove(start_node)
+            except ValueError:
+                SLog.warning(f"Error occur! {uncheck_nodes} might "
+                        "have a node is not in the whole map loop")
+                raise ValueError
+
+            if not uncheck_nodes:
+                return shortest_path, current_distance
+
+            # if already visited before, we will not visit it again.
+            # TODO: check dead end before map generation
+            try:
+                while next_node and next_node[0] not in uncheck_nodes:
+                    next_node.popleft()
+            except IndexError:
+                SLog.warning(f"Error occur! {start_node} might not have an exit path")
+                raise IndexError
+
+            # We update the node to the neighbouring node, and update current path as well
+            if next_node:
+                start_node = next_node.popleft()
+                current_path = shortest_path[start_node]

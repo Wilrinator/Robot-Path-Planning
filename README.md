@@ -1,2 +1,9 @@
 # Robot-Path-Planning
-showing how I plan path of robot most optimally
+This project simulates a multi-robot routing system inspired by
+real-world delivery robot optimization.
+
+Key features:
+- Multi-agent path planning
+- Collision avoidance
+- Task assignment
+- Continuous movement without unnecessary stops (require good robots)

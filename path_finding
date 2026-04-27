@@ -4,6 +4,7 @@ How to find a shortest path using single function for all kinds of maps?  By usi
 
 We use Dijkstra’s algorithm because the map is modeled as a weighted graph where each movement cost is non-negative. Dijkstra guarantees finding the optimal (shortest-cost) path from the start node to all reachable nodes.
 
+Ps: if you want to konw how Dijkstra works, you can go to Dijkstra.png and read its comment.
 
 
     def __perform_dijkstra_algorithm(self, start_node: int):
